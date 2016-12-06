@@ -1,11 +1,13 @@
 clear all;
 clc;
 
+%% Possible values: hebbian, anti_hebbian, random_walk
 update_rule = 'hebbian';
+
 %% Machine Parameters
-k = 100;
-n = 10;
-l = 10;
+k = 4;
+n = 4;
+l = 4;
 %%
 Alice = machine(k, n, l);
 Bob = machine(k, n, l);
@@ -18,6 +20,7 @@ nb_eve_updates = 0; % To count the number of times eve updated
 sync_history = []; % to store the sync score after every update
 tic
 %%
+figure('units','normalized','outerposition',[0 0 1 1])
 while(not(sync))
     X = randi([-l l],k,n);
 	tauA = Alice.get_output(X); % Get output from Alice
@@ -37,14 +40,14 @@ while(not(sync))
     
     sync_history = [sync_history score];
     
-    
-%     eve_score = round(100 * (sync_score(Alice, Eve,l)))
-%     if(eve_score == 100)
-%         sync = 1;
-%     end
      if(score == 100)
          sync = 1;
      end
+     pause(0.001)
+     imagesc(Alice.W - Bob.W,[-l,l])
+     title('SYNCHRONIZATION OF MACHINE WEIGHTS')
+     xlabel('Input')
+     ylabel('Hidden Neuron')
 end
 
 %See if Eve got what she wanted:
@@ -55,5 +58,9 @@ else
     disp(strcat('Eves machine is only ',num2str(eve_score),'% ', 'synced with Alices and Bobs and she did  ',num2str(nb_eve_updates),' updates'));
 end
 %%
+figure('units','normalized','outerposition',[0 0 1 1])
 plot(sync_history)
+title('SYNCHRONIZATION SCORE')
+xlabel('Number of Updates')
+ylabel('Sync Score')
 toc

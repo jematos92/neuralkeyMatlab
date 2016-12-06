@@ -4,7 +4,7 @@ function W = random_walk(W, X, sigma, tau1, tau2, l)
     
     for i = 1:k
         for j = 1:n
-            W(i,j) = W(i,j) + X(i, j) * theta(sigma(i), tau1) * theta(tau1, tau2); 
+            W(i,j) = W(i,j) + X(i, j) * theta(sigma(j), tau1) * theta(tau1, tau2);
             W(i,j) = clip(W(i,j),-l,l);
         end
     end
